@@ -50,6 +50,10 @@ const toursSchema = new mongoose.Schema(
     },
     images: [String],
     startDates: [Date],
+    secretTour: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
@@ -70,6 +74,19 @@ toursSchema.pre("save", function (next) {
 });
 
 // toursSchema.post("save", function (doc, next) {
+//   console.log(doc);
+//   next();
+// });
+
+// QUERY MIDDLEWARE
+toursSchema.pre(/^find/, function (next) {
+  this.find({ secretTour: { $ne: true } });
+  // this.start = Date.now();
+  next();
+});
+
+// toursSchema.post(/^find/, function (doc, next) {
+//   console.log(`Query took ${Date.now() - this.start} ms`);
 //   console.log(doc);
 //   next();
 // });

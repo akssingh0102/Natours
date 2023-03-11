@@ -1,24 +1,24 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const toursSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, 'A tour must have a name'],
+      required: [true, "A tour must have a name"],
       unique: true,
       trim: true,
     },
     duration: {
       type: Number,
-      required: [true, 'A tour must have a duration'],
+      required: [true, "A tour must have a duration"],
     },
     maxGroupSize: {
       type: Number,
-      required: [true, 'A tour must have a group size'],
+      required: [true, "A tour must have a group size"],
     },
     difficulty: {
       type: String,
-      required: [true, 'A tour must have a difficulty'],
+      required: [true, "A tour must have a difficulty"],
     },
     ratingsAverage: {
       type: Number,
@@ -30,13 +30,13 @@ const toursSchema = new mongoose.Schema(
     },
     price: {
       type: Number,
-      required: [true, 'A tour must have a price'],
+      required: [true, "A tour must have a price"],
     },
     priceDiscount: Number,
     summary: {
       type: String,
       trim: true,
-      required: [true, 'A tour must have a summary'],
+      required: [true, "A tour must have a summary"],
     },
     description: {
       type: String,
@@ -44,16 +44,22 @@ const toursSchema = new mongoose.Schema(
     },
     imageCover: {
       type: String,
-      required: [true, 'A tour must have a cover image'],
+      required: [true, "A tour must have a cover image"],
     },
     images: [String],
-    startDates: [Date] 
+    startDates: [Date],
   },
   {
     timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   }
 );
 
-const Tour = mongoose.model('Tour', toursSchema);
+toursSchema.virtual("durationWeeks").get(function () {
+  return this.duration / 7;
+});
+
+const Tour = mongoose.model("Tour", toursSchema);
 
 module.exports = Tour;

@@ -10,7 +10,9 @@ router
   .route("/top-5-cheap-tours")
   .get(tourController.aliasTopTours, tourController.getAllTours);
 
+// Aggregation Pipeline Routes
 router.route("/tour-stats").get(tourController.getTourStats);
+router.route("/monthly-plan/:year").get(tourController.getMonthlyPlan);
 
 router
   .route("/")

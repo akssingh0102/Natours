@@ -84,7 +84,7 @@ const deleteTour = async (req, res) => {
 };
 
 // @desc Get tour status using mongoDB aggregation pipeline (Matching, Grouping and Sort)
-// @route GET /api/v1/tours
+// @route GET /api/v1/tours/tour-stats
 // @access public
 const getTourStats = async (req, res) => {
   try {
@@ -114,6 +114,49 @@ const getTourStats = async (req, res) => {
   }
 };
 
+const getMonthlyPlan = async (req, res) => {
+  try {
+    const year = req.params.year * 1;
+
+    const plan = await Tour.aggregate([
+      { $unwind: "$startDates" },
+      {
+        $match: {
+          startDates: {
+            $gte: new Date(`${year}-01-01`),
+            $lte: new Date(`${year}-12-31`),
+          },
+        },
+      },
+      {
+        $group: {
+          _id: { $month: "$startDates" },
+          numTourStarts: { $sum: 1 },
+          tours: { $push: "$name" },
+        },
+      },
+      {
+        $addFields: { month: "$_id" },
+      },
+      {
+        $project: {
+          _id: 0,
+        },
+      },
+      {
+        $sort: { numTourStarts: -1 },
+      },
+      {
+        $limit: 12,
+      },
+    ]);
+
+    res.json({ status: "success", data: plan });
+  } catch (err) {
+    res.status(404).json({ status: "fail", message: err });
+  }
+};
+
 module.exports = {
   getAllTours,
   getTour,
@@ -122,4 +165,5 @@ module.exports = {
   deleteTour,
   aliasTopTours,
   getTourStats,
+  getMonthlyPlan,
 };

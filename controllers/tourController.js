@@ -83,7 +83,7 @@ const deleteTour = async (req, res) => {
   }
 };
 
-// @desc Get tour status using mongoDB aggregation pipeline
+// @desc Get tour status using mongoDB aggregation pipeline (Matching, Grouping and Sort)
 // @route GET /api/v1/tours
 // @access public
 const getTourStats = async (req, res) => {

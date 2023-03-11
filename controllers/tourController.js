@@ -6,15 +6,19 @@ const Tour = require('./../models/tourModel');
 const getAllTours = async (req, res) => {
   try {
     // creating a deep copy of query parameter
+    // 1. Filtering
     const queryObj = { ...req.query };
     const excludeFields = ['page', 'sort', 'limit', 'fields'];
     excludeFields.forEach((el) => delete queryObj[el]);
 
     // BUILD QUERY
-    // Normal way of query
-    const query = Tour.find(queryObj);
+    // 2. Advance filtering
+    let queryStr = JSON.stringify(queryObj);
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match=> `$${match}`);
+    console.log(JSON.parse(queryStr));
 
-    // Mongoose special methods
+    const query = Tour.find(JSON.parse(queryStr));
+
     // const query = Tour.find()
     //   .where('duration')
     //   .equals(5)

@@ -100,7 +100,7 @@ toursSchema.pre("save", function (next) {
 // QUERY MIDDLEWARE
 toursSchema.pre(/^find/, function (next) {
   this.find({ secretTour: { $ne: true } });
-  // this.start = Date.now();
+  this.start = Date.now();
   next();
 });
 

@@ -14,20 +14,16 @@ const aliasTopTours = (req, res, next) => {
 // @route GET /api/v1/tours
 // @access public
 const getAllTours = catchAsync(async (req, res, next) => {
-  try {
-    // EXECUTE QUERY
-    const feature = new APIFeatures(Tour.find(), req.query)
-      .filter()
-      .sort()
-      .limitFields()
-      .paginate();
+  // EXECUTE QUERY
+  const feature = new APIFeatures(Tour.find(), req.query)
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
 
-    const tours = await feature.query;
+  const tours = await feature.query;
 
-    res.json({ status: "success", results: tours.length, data: tours });
-  } catch (err) {
-    res.status(400).json({ status: "fail", message: err });
-  }
+  res.json({ status: "success", results: tours.length, data: tours });
 });
 
 // @desc Create a tour
@@ -42,18 +38,14 @@ const createTour = catchAsync(async (req, res, next) => {
 // @route GET /api/v1/tours/:id
 // @access public
 const getTour = catchAsync(async (req, res, next) => {
-  try {
-    const tour = await Tour.findById(req.params.id);
-    // This is just a replacement for Tour.findOne({_id:req.params.id})
+  const tour = await Tour.findById(req.params.id);
+  // This is just a replacement for Tour.findOne({_id:req.params.id})
 
-    if (!tour) {
-      return next(new AppError(`No tour found with ID ${req.params.id}`, 404));
-    }
-
-    res.json({ status: "success", data: tour });
-  } catch (err) {
-    res.status(404).json({ status: "fail", message: err });
+  if (!tour) {
+    return next(new AppError(`No tour found with ID ${req.params.id}`, 404));
   }
+
+  res.json({ status: "success", data: tour });
 });
 
 // @desc Update a tour

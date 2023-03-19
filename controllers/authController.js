@@ -91,6 +91,7 @@ const protect = catchAsync(async (req, res, next) => {
   next();
 });
 
+// Restrict middleware to only allow certain user roles
 const restrictTo = (...roles) => {
   return (req, res, next) => {
     // roles = ['admin', 'lead-guide']
@@ -103,9 +104,41 @@ const restrictTo = (...roles) => {
   };
 };
 
+// @desc Generate reset token
+// @route POST /api/v1/users/forgot-password
+// @access public
+const forgotPassword = catchAsync(async (req, res, next) => {
+  // 1) get user based on email
+  const { email } = req.body;
+  if (!email) {
+    return next(new AppError("Please enter your email address"), 403);
+  }
+  const user = await User.findOne({ email });
+  if (!user) {
+    return next(new AppError(`There is no user with email : ${email}`));
+  }
+
+  // 2)Generate random reset token
+  const resetToken = user.createPasswordRestToken();
+  await user.save({ validateBeforeSave: false });
+
+  // 3)Send it to users email
+
+  res.status(200).json({ resetToken });
+});
+
+// @desc Reset Password
+// @route POST /api/v1/users/reset-password
+// @access public
+const resetPassword = (req, res, next) => {
+  next();
+};
+
 module.exports = {
   signup,
   login,
   protect,
   restrictTo,
+  forgotPassword,
+  resetPassword,
 };

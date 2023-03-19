@@ -12,7 +12,7 @@ const aliasTopTours = (req, res, next) => {
 
 // @desc Get all tours
 // @route GET /api/v1/tours
-// @access public
+// @access private
 const getAllTours = catchAsync(async (req, res, next) => {
   // EXECUTE QUERY
   const feature = new APIFeatures(Tour.find(), req.query)
@@ -23,7 +23,9 @@ const getAllTours = catchAsync(async (req, res, next) => {
 
   const tours = await feature.query;
 
-  res.json({ status: "success", results: tours.length, data: tours });
+  res
+    .status(200)
+    .json({ status: "success", results: tours.length, data: tours });
 });
 
 // @desc Create a tour
@@ -31,7 +33,7 @@ const getAllTours = catchAsync(async (req, res, next) => {
 // @access public
 const createTour = catchAsync(async (req, res, next) => {
   const newTour = await Tour.create(req.body);
-  res.json({ status: "success", data: newTour });
+  res.status(201).json({ status: "success", data: newTour });
 });
 
 // @desc Get a tour by ID
@@ -45,7 +47,7 @@ const getTour = catchAsync(async (req, res, next) => {
     return next(new AppError(`No tour found with ID ${req.params.id}`, 404));
   }
 
-  res.json({ status: "success", data: tour });
+  res.status(200).json({ status: "success", data: tour });
 });
 
 // @desc Update a tour
@@ -61,7 +63,7 @@ const updateTour = catchAsync(async (req, res, next) => {
     return next(new AppError(`No tour found with ID ${req.params.id}`, 404));
   }
 
-  res.json({ status: "success", data: tour });
+  res.status(200).json({ status: "success", data: tour });
 });
 
 // @desc Delete a tour
@@ -101,7 +103,7 @@ const getTourStats = catchAsync(async (req, res, next) => {
     },
   ]);
 
-  res.json({ status: "success", data: stats });
+  res.status(200).json({ status: "success", data: stats });
 });
 
 const getMonthlyPlan = catchAsync(async (req, res, next) => {
@@ -140,7 +142,7 @@ const getMonthlyPlan = catchAsync(async (req, res, next) => {
     },
   ]);
 
-  res.json({ status: "success", data: plan });
+  res.status(200).json({ status: "success", data: plan });
 });
 
 module.exports = {

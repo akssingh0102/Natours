@@ -192,7 +192,6 @@ const resetPassword = catchAsync(async (req, res, next) => {
     status: "success",
     token,
   });
-  next();
 });
 
 module.exports = {

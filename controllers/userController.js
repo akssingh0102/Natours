@@ -42,6 +42,18 @@ const updateMe = catchAsync(async (req, res, next) => {
   });
 });
 
+// @desc Delete Self
+// @route DELETE /api/v1/users/delete-me
+// @access private
+const deleteMe = catchAsync(async (req, res, next) => {
+  await User.findByIdAndUpdate(req.user.id, { active: false });
+
+  res.status(204).json({
+    response: "success",
+    data: null,
+  });
+});
+
 const createUser = (req, res) => {
   res.status(500).send({
     status: "error",
@@ -77,4 +89,5 @@ module.exports = {
   updateUser,
   deleteUser,
   updateMe,
+  deleteMe,
 };

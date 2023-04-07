@@ -188,8 +188,8 @@ const resetPassword = catchAsync(async (req, res, next) => {
   createSendToken(user, 200, res);
 });
 
-// @desc Reset Password
-// @route POST /api/v1/users/update-my-password
+// @desc Update self password
+// @route PATCH /api/v1/users/update-my-password
 // @access private
 const updateMyPassword = catchAsync(async (req, res, next) => {
   // 1) Get User from the collection

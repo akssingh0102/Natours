@@ -26,10 +26,10 @@ const limiter = rateLimit({
   message: "Too many request from this IP, please try again in an hour!",
 });
 
-app.use('/api', limiter);
+app.use("/api", limiter);
 
 // Body parser (rea ding data from body into req.body)
-app.use(express.json({limit: '10kb '}));
+app.use(express.json({ limit: "10kb " }));
 
 // Serving Static Files
 app.use(express.static(`${__dirname}/public`));
